@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+<!--<!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="utf-8">
-    
+    <script src="jquery.js"></script>
     <link rel="stylesheet" type="text/css" href="css/index.css" />
     <title>Js</title>
 </head>
@@ -56,6 +56,8 @@
                         <th>CODIGO</th>
                         <th>NOMBRE</th>
                         <th>NOTA</th>
+                        <th>EDITAR</th>
+                        <th>ELIMINAR</th>
                     </tr>
                 </thead>
             </table>
@@ -66,6 +68,194 @@
     </div>
 
     <script type="text/javascript" src="js/index.js"></script>
+</body>
+
+</html>-->
+
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <script src="js/jquery.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/index.css" />
+    <script type="text/javascript">
+
+
+        var estudiante = [];
+
+        function editarestudiante(codigo) {
+
+
+
+            for (var i = 0; i < localStorage.length; i++) {
+
+                var clave = localStorage.key(i);
+                if (clave == codigo) {
+
+                    estudiante = $.parseJSON(localStorage.getItem(clave));
+
+                    $("#codigo").val(estudiante.codigo);
+                    $("#nombre").val(estudiante.nota);
+                    $("#nota").val(estudiante.nota);
+
+                }
+
+
+            }
+
+
+        }
+
+
+        function listarestudiantes() {
+            var tabla = "";
+            var parrafo1 = $("#p1");
+            tabla += '<table border="1">';
+            tabla += '<tr>';
+            tabla += '<th id="cod">CODIGO</th>';
+            tabla += ' <th>NOMBRE</th>';
+            tabla += '<th>NOTA</th>';
+            tabla += '<th>EDITAR</th>';
+            tabla += '<th>ELIMINAR</th>';
+            tabla += '</tr>';
+            for (var i = 0; i < localStorage.length; i++) {
+                var clave = localStorage.key(i);
+                estudiante = $.parseJSON(localStorage.getItem(clave));
+                tabla += '<tr>';
+                tabla += '<td>' + estudiante.codigo + '</td>';
+                tabla += '<td>' + estudiante.nombre + '</td>';
+                tabla += '<td>' + estudiante.nota + '</td>';
+                tabla += '<td><button onclick="editarestudiante(\'' + estudiante.codigo + '\');">Editar</button></td>';
+                tabla += '<td><button onclick="eliminarestudiante(\'' + estudiante.codigo + '\');">Eliminar</button></td>';
+                tabla += '</tr>';
+            }
+            tabla += '</table>';
+            $(parrafo1).html(tabla);
+        }
+        function eliminarestudiante(codigo) {
+            localStorage.removeItem(codigo);
+            listarestudiantes();
+
+        }
+
+        $(document).ready(function () {
+
+            $("#boton1").click(function () {
+                var codigo = $("#codigo").val();
+                var nombre = $("#nombre").val();
+                var nota = $("#nota").val();
+                estudiante = {
+                    codigo: codigo,
+                    nombre: nombre,
+                    nota: nota
+                };
+                localStorage.setItem(codigo, JSON.stringify(estudiante));
+                contador = localStorage.length + 1;
+                listarestudiantes();
+                reestablecer();
+            });
+
+            $("#boton2").click(function () {
+                reestablecer();
+            });
+
+            function reestablecer() {
+                $("#codigo").val("");
+                $("#nombre").val("");
+                $("#nota").val("");
+            }
+
+            $("#promedio").click(function () {
+                let suma = 0;
+                var promedio= 0;
+                for (var i = 0; i < localStorage.length; i++) {
+                    var clave = localStorage.key(i);
+                    estudiante = $.parseJSON(localStorage.getItem(clave));
+                    suma =  estudiante.nota;
+                }
+                promedio = suma/localStorage.length
+                $('#pantalla').html('<b>EL PROMEDIO ES </b>' + promedio);
+
+            });
+            $("#mayor").click(function () {
+                var max = 0;
+                var mayor= 0;
+                for (var i = 0; i < localStorage.length; i++) {
+                    var clave = localStorage.key(i);
+                    estudiante = $.parseJSON(localStorage.getItem(clave));
+                    if(estudiante.nota > max){
+                        max =estudiante.nota
+                        console.log(max)
+                    }
+                }
+                $('#pantalla').html('<b>EL MAYOR ES </b>' + max);
+
+            });
+
+            $("#menor").click(function () {
+                var min = 11;
+                var mayor= 0;
+                for (var i = 0; i < localStorage.length; i++) {
+                    var clave = localStorage.key(i);
+                    estudiante = $.parseJSON(localStorage.getItem(clave));
+                    if(estudiante.nota < min){
+                        min =estudiante.nota
+                        console.log(min)
+                    }
+                }
+                $('#pantalla').html('<b>EL MAYOR ES </b>' + min);
+
+            });
+
+            listarestudiantes();
+        });
+
+
+
+
+
+
+    </script>
+
+
+
+</head>
+
+<body>
+
+
+
+    <h1>Registro Estudiantes</h2>
+
+        <form>
+            Codigo:
+            <br>
+            <input type="number" id="codigo" >
+            <br>Nombre:
+            <br>
+            <input type="text" id="nombre">
+            <br>Nota:
+            <br>
+            <input type="number" id="nota" max="10">
+            </textarea>
+            <br>
+        </form>
+
+        <button class="button" id="boton1">REGISTRAR</button>
+        <button class="button" id="promedio">PROMEDIO</button>
+        <button class="button" id="mayor">NOTA MAYOR</button>
+        <button class="button" id="menor">NOTA MENOR</button>
+        <!-- <button id="boton1">Guardar</button>-->
+        <button class="button" id="boton2">REESTABLECER</button>
+
+
+        <p id="p1"></p>
+        <div>
+            <label id="pantalla"></label>
+        </div>
+
 </body>
 
 </html>

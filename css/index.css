@@ -97,3 +97,9 @@ tr:hover td {
 	background: #d0dafd;
 	color: #339;
 }
+
+#pantalla{
+font-size: 20px;
+font-weight: bold;
+color: green;
+}
